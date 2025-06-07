@@ -36,6 +36,7 @@ module.exports = function (app) {
     .post(async function (req, res) {
       let title = req.body.title;
       //response will contain new book object including atleast _id and title
+      if (!title || title.trim() === '') return res.status(200).send('missing required field title')
       const book = new Book({ title })
 
       try {
@@ -66,32 +67,40 @@ module.exports = function (app) {
         const book = await Book.findById(bookid)
         res.json(book)
       } catch (error) {
-        res.status(500).json(error.message)
+        res.status(404).send('no book exists')
       }
     })
 
     .post(async function (req, res) {
-      let bookid = req.params.id;
+      let _id = req.params.id;
       let comment = req.body.comment;
       //json res format same as .get
+
+      if (!comment) return res.status(200).send('missing required field comment')
+
       try {
-        await Book.updateOne(
-          { _id: bookid },
-          { $push: { comments: comment } }
-        )
-        const updated = await Book.findById(bookid)
-        res.json(updated)
+        const result = await Book.findByIdAndUpdate(_id, { $push: { comments: comment } }, { new: true })
+        if (result) {
+          res.json(result)
+        } else {
+          res.status(200).send('missing required field title')
+        }
       } catch (error) {
         res.status(500).json(error.message)
       }
     })
 
     .delete(async function (req, res) {
-      let bookid = req.params.id;
+      let _id = req.params.id;
       //if successful response will be 'delete successful'
       try {
-        await Book.deleteOne({ _id: bookid })
-        res.send('delete successful')
+        const result = await Book.findOneAndDelete({ _id })
+
+        if (!result) {
+          res.status(404).send('no book exists')
+        } else {
+          res.send('delete successful')
+        }
       } catch (error) {
         res.status(500).json(error.message)
       }
