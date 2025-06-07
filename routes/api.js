@@ -61,13 +61,18 @@ module.exports = function (app) {
 
   app.route('/api/books/:id')
     .get(async function (req, res) {
-      let bookid = req.params.id;
+      let _id = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       try {
-        const book = await Book.findById(bookid)
-        res.json(book)
+        const book = await Book.findById(_id)
+
+        if (book) {
+          res.json(book)
+        } else {
+          res.status(404).send('no book exists')
+        }
       } catch (error) {
-        res.status(404).send('no book exists')
+        res.status(500).json(error.message)
       }
     })
 
@@ -83,7 +88,7 @@ module.exports = function (app) {
         if (result) {
           res.json(result)
         } else {
-          res.status(200).send('missing required field title')
+          res.status(404).send('no book exists')
         }
       } catch (error) {
         res.status(500).json(error.message)

@@ -89,7 +89,7 @@ suite('Functional Tests', function () {
 
       test('Test GET /api/books/[id] with id not in db', function (done) {
         chai.request(server)
-          .get('/api/books/not_valid_id')
+          .get('/api/books/6844b45a711d899e460508a1')
           .end(function (err, res) {
             assert.equal(res.status, 404)
             assert.equal(res.text, 'no book exists', 'Response should be an errror messaje')
@@ -147,8 +147,8 @@ suite('Functional Tests', function () {
           .post('/api/books/6844a93d8011b3001335e507')
           .send({ comment })
           .end(function (err, res) {
-            assert.equal(res.status, 200)
-            assert.equal(res.text, 'missing required field title', 'Response should be an error message')
+            assert.equal(res.status, 404)
+            assert.equal(res.text, 'no book exists', 'Response should be an error message')
             done();
           })
       });
