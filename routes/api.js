@@ -73,7 +73,7 @@ module.exports = function (app) {
         if (book) {
           res.json(book)
         } else {
-          res.status(404).send('no book exists')
+          res.status(200).send('no book exists')
         }
       } catch (error) {
         res.status(500).json(error.message)
@@ -93,7 +93,7 @@ module.exports = function (app) {
         if (result) {
           res.json(result)
         } else {
-          res.status(404).send('no book exists')
+          res.status(200).send('no book exists')
         }
       } catch (error) {
         res.status(500).json(error.message)
@@ -110,7 +110,7 @@ module.exports = function (app) {
         const result = await Book.findOneAndDelete({ _id })
 
         if (!result) {
-          res.status(404).send('no book exists')
+          res.status(200).send('no book exists')
         } else {
           res.send('delete successful')
         }
