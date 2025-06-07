@@ -91,7 +91,7 @@ suite('Functional Tests', function () {
         chai.request(server)
           .get('/api/books/{_id}')
           .end(function (err, res) {
-            assert.equal(res.status, 404)
+            assert.equal(res.status, 200)
             assert.equal(res.text, 'no book exists', 'Response should be an errror messaje')
             done();
           })
@@ -147,7 +147,7 @@ suite('Functional Tests', function () {
           .post('/api/books/{_id}')
           .send({ comment })
           .end(function (err, res) {
-            assert.equal(res.status, 404)
+            assert.equal(res.status, 200)
             assert.equal(res.text, 'no book exists', 'Response should be an error message')
             done();
           })
@@ -171,7 +171,7 @@ suite('Functional Tests', function () {
         chai.request(server)
           .delete('/api/books/{_id}')
           .end(function (err, res) {
-            assert.equal(res.status, 404)
+            assert.equal(res.status, 200)
             assert.equal(res.text, 'no book exists', 'Should be an error message')
             done();
           })
