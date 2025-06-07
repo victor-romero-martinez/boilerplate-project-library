@@ -8,6 +8,7 @@
 
 'use strict';
 
+const mongoose = require('mongoose')
 const Book = require('../models/Books.js')
 
 module.exports = function (app) {
@@ -62,6 +63,9 @@ module.exports = function (app) {
   app.route('/api/books/:id')
     .get(async function (req, res) {
       let _id = req.params.id;
+
+      if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('no book exists')
+
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       try {
         const book = await Book.findById(_id)
@@ -81,6 +85,7 @@ module.exports = function (app) {
       let comment = req.body.comment;
       //json res format same as .get
 
+      if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('no book exists')
       if (!comment) return res.status(200).send('missing required field comment')
 
       try {
@@ -97,6 +102,9 @@ module.exports = function (app) {
 
     .delete(async function (req, res) {
       let _id = req.params.id;
+
+      if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('no book exists')
+
       //if successful response will be 'delete successful'
       try {
         const result = await Book.findOneAndDelete({ _id })

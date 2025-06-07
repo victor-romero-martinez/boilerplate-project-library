@@ -89,7 +89,7 @@ suite('Functional Tests', function () {
 
       test('Test GET /api/books/[id] with id not in db', function (done) {
         chai.request(server)
-          .get('/api/books/6844b45a711d899e460508a1')
+          .get('/api/books/{_id}')
           .end(function (err, res) {
             assert.equal(res.status, 404)
             assert.equal(res.text, 'no book exists', 'Response should be an errror messaje')
@@ -144,7 +144,7 @@ suite('Functional Tests', function () {
 
       test('Test POST /api/books/[id] with comment, id not in db', function (done) {
         chai.request(server)
-          .post('/api/books/6844a93d8011b3001335e507')
+          .post('/api/books/{_id}')
           .send({ comment })
           .end(function (err, res) {
             assert.equal(res.status, 404)
@@ -169,7 +169,7 @@ suite('Functional Tests', function () {
 
       test('Test DELETE /api/books/[id] with  id not in db', function (done) {
         chai.request(server)
-          .delete('/api/books/6844a93d8011b3001335e507')
+          .delete('/api/books/{_id}')
           .end(function (err, res) {
             assert.equal(res.status, 404)
             assert.equal(res.text, 'no book exists', 'Should be an error message')
